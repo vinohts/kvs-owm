@@ -1,6 +1,6 @@
 name: Deploy CDK Stack via OIDC
 
-# Manual trigger
+# Trigger manually
 on:
   workflow_dispatch:
 
@@ -30,14 +30,14 @@ jobs:
         with:
           node-version: 18
 
-      # 4️⃣ Install dependencies inside CDK folder
+      # 4️⃣ Debug: list files in CDK folder to confirm path
+      - name: List CDK folder contents
+        run: ls -R automation/webserver
+
+      # 5️⃣ Install dependencies in CDK folder
       - name: Install dependencies
         run: npm install
         working-directory: automation/webserver
-
-      # 5️⃣ Install CDK globally (optional, but safer)
-      - name: Install AWS CDK
-        run: npm install -g aws-cdk
 
       # 6️⃣ Build CDK TypeScript project
       - name: Build CDK
