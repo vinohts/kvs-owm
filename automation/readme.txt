@@ -1,4 +1,4 @@
-3 Linux EC2 instances
+2 Linux EC2 instances
 
 Instance type: t3.micro
 
