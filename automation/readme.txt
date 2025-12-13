@@ -1,4 +1,4 @@
-2 Linux EC2 instances for Webserver
+2 Linux EC2 instances for Webserver for practice 
 
 Instance type: t3.micro
 
