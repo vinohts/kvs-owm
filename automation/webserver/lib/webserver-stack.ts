@@ -15,7 +15,7 @@ export class PrivateWebserverStack extends Stack {
     });
 
     // -----------------------------
-    // Import existing PRIVATE subnet
+    // Import existing private subnet
     // -----------------------------
     const privateSubnet = ec2.Subnet.fromSubnetAttributes(
       this,
@@ -28,7 +28,7 @@ export class PrivateWebserverStack extends Stack {
     );
 
     // -----------------------------
-    // Security Group (HTTP only)
+    // Security Group
     // -----------------------------
     const webSg = new ec2.SecurityGroup(this, 'WebSecurityGroup', {
       vpc,
@@ -43,20 +43,20 @@ export class PrivateWebserverStack extends Stack {
     );
 
     // -----------------------------
-    // User data (Apache)
-    // -----------------------------
-    const userData = ec2.UserData.forLinux();
-    userData.addCommands(
-      'yum update -y',
-      'yum install -y httpd',
-      'systemctl enable httpd',
-      'systemctl start httpd'
-    );
-
-    // -----------------------------
-    // EC2 instances (2 servers)
+    // Create 2 EC2 instances
     // -----------------------------
     for (let i = 1; i <= 2; i++) {
+
+      // 🔹 Unique UserData per server
+      const userData = ec2.UserData.forLinux();
+      userData.addCommands(
+        'yum update -y',
+        'yum install -y httpd',
+        'systemctl enable httpd',
+        'systemctl start httpd',
+        `echo "<h1>Welcome to Webserver-${i}</h1>" > /var/www/html/index.html`
+      );
+
       new ec2.Instance(this, `WebServer${i}`, {
         vpc,
         instanceType: new ec2.InstanceType('t3.micro'),
